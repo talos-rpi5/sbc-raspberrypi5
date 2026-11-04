@@ -25,7 +25,7 @@ SOURCE_DATE_EPOCH := $(shell git log $(INITIAL_COMMIT_SHA) --pretty=%ct)
 
 # sync bldr image with pkgfile
 
-BLDR_RELEASE := v0.4.1
+BLDR_RELEASE := v0.6.5
 BLDR_IMAGE := ghcr.io/siderolabs/bldr:$(BLDR_RELEASE)
 BLDR := docker run --rm --user $(shell id -u):$(shell id -g) --volume $(PWD):/src --entrypoint=/bldr $(BLDR_IMAGE) --root=/src
 
@@ -49,9 +49,9 @@ COMMON_ARGS += --build-arg=TOOLS="$(TOOLS)"
 # extra variables
 
 PKGS_PREFIX ?= ghcr.io/siderolabs
-PKGS ?= v1.10.0
+PKGS ?= v1.14.0-48-gf4bda77
 TOOLS_PREFIX ?= ghcr.io/siderolabs
-TOOLS ?= v1.10.0
+TOOLS ?= v1.14.0-11-g8dad45e
 
 # targets defines all the available targets
 

@@ -5,9 +5,12 @@
 package main
 
 import (
+	"context"
 	_ "embed"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 
 	"github.com/siderolabs/go-copy/copy"
 	"github.com/siderolabs/talos/pkg/machinery/overlay"
@@ -18,7 +21,10 @@ import (
 var configTxt []byte
 
 func main() {
-	adapter.Execute(&RpiInstaller{})
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	adapter.Execute(ctx, &RpiInstaller{})
 }
 
 type RpiInstaller struct{}
@@ -28,7 +34,7 @@ type rpiOptions struct {
 	ConfigTxtAppend string `yaml:"configTxtAppend,omitempty"`
 }
 
-func (i *RpiInstaller) GetOptions(extra rpiOptions) (overlay.Options, error) {
+func (i *RpiInstaller) GetOptions(_ context.Context, extra rpiOptions) (overlay.Options, error) {
 	return overlay.Options{
 		Name: "rpi5",
 		KernelArgs: []string{
@@ -40,7 +46,7 @@ func (i *RpiInstaller) GetOptions(extra rpiOptions) (overlay.Options, error) {
 	}, nil
 }
 
-func (i *RpiInstaller) Install(options overlay.InstallOptions[rpiOptions]) error {
+func (i *RpiInstaller) Install(_ context.Context, options overlay.InstallOptions[rpiOptions]) error {
 	err := copy.Dir(filepath.Join(options.ArtifactsPath, "arm64/firmware/boot"), filepath.Join(options.MountPrefix, "/boot/EFI"))
 	if err != nil {
 		return err

@@ -16,6 +16,10 @@ steps:
         tar xf u-boot.tar.gz --strip-components=1
       - |
         make rpi_5_defconfig
+      - |
+        # the toolchain's OpenSSL no longer provides the ENGINE API
+        ./scripts/config --disable TOOLS_LIBCRYPTO --disable TOOLS_KWBIMAGE --disable TOOLS_MKEFICAPSULE
+        make olddefconfig
     build:
       - |
         make -j $(nproc) HOSTLDLIBS_mkimage="-lssl -lcrypto" u-boot.bin

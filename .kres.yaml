@@ -13,11 +13,11 @@ spec:
       - name: PKGS_PREFIX
         defaultValue: ghcr.io/siderolabs
       - name: PKGS
-        defaultValue: v1.10.0
+        defaultValue: v1.14.0-48-gf4bda77
       - name: TOOLS_PREFIX
         defaultValue: ghcr.io/siderolabs
       - name: TOOLS
-        defaultValue: v1.10.0
+        defaultValue: v1.14.0-11-g8dad45e
 ---
 kind: common.Build
 spec:
@@ -29,7 +29,7 @@ spec:
   packageRules:
     - matchPackageNames:
         - talos-rpi5/u-boot
-      versioning: 'regex:^(?<major>\d+)\.(?<minor>\d+)\.?(?<patch>\d+)?$'
+      versioning: 'regex:^v(?<major>\d+)\.(?<minor>\d+)-rpi5-(?<patch>\d+)$'
     - matchPackageNames:
         - raspberrypi/firmware
       versioning: 'regex:^\d+\.(?<major>\d{4})(?<minor>\d{2})(?<patch>\d{2})$'
